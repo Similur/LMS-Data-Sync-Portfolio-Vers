@@ -1,25 +1,34 @@
-# LMS Data Sync — Incremental Pipeline Demo
+# LMS Data Sync — Python ETL Pipeline
 
-A small Python portfolio project based on general learning-management-system integration patterns. It uses **fully synthetic records**, a local SQLite database, and a CSV-based mock source. No access to Canvas, Microsoft Fabric, or an employer system is required.
+This is a small portfolio project I put together to demonstrate some of the data engineering concepts I've worked with professionally.
 
-## What it shows
+The project is inspired by my experience building and maintaining a data integration using **Instructure's Canvas Data Access Platform (DAP) library** to synchronize data between Canvas and a target database.
 
-- Incremental synchronization of example courses, users, enrollments, and submissions datasets
-- Repeatable upserts so rerunning a batch does not duplicate records
-- Per-dataset checkpoints, with transaction-backed updates
-- Basic schema checks, UTC timestamp handling, and logging
-- Unit tests covering repeated loads, changed records, and invalid timestamps
+This version is strictly a test project. It uses synthetic data, CSV files, and a local SQLite database to demonstrate similar ETL concepts without relying on any company systems, production data, or proprietary code.
 
-## Run it
+## What it does
 
-Requires Python 3.10+ and only the standard library.
+The project covers several common data engineering tasks:
+
+- **Incremental data syncing:** Processes sample course, user, enrollment, and submission records without reloading everything each time.
+- **Inserts and updates:** Uses upserts to handle new and modified records while avoiding duplicates.
+- **Checkpoint tracking:** Keeps track of successful syncs so the pipeline knows where to pick up.
+- **Data validation:** Checks incoming records and handles timestamps before loading them.
+- **Logging:** Records processing activity to make it easier to troubleshoot issues.
+- **Unit testing:** Includes tests for repeated runs, updated records, and invalid timestamps.
+
+## Getting started
+
+You'll need Python 3.10 or newer. Everything runs using Python's standard library, so there's nothing extra to install.
+
+**Linux / macOS:**
 
 ```bash
 PYTHONPATH=src python -m canvas_sync.sync
 PYTHONPATH=src python -m unittest discover -s tests -v
 ```
 
-On Windows PowerShell:
+**Windows PowerShell:**
 
 ```powershell
 $env:PYTHONPATH = "src"
@@ -27,20 +36,31 @@ python -m canvas_sync.sync
 python -m unittest discover -s tests -v
 ```
 
-Results are written to `output/demo.sqlite3`. Repeated runs are safe. Deleting the database starts a fresh demo sync.
+The pipeline creates a local SQLite database at `output/demo.sqlite3`.
 
-## Project context and boundaries
+You can run it multiple times without creating duplicate records. If you want to start over, just delete the database and run the script again.
 
-This is a **new illustrative implementation**, not the original code used at a previous employer. It intentionally does not use Instructure's DAP client or reproduce a production Canvas Data 2 API call, table schema, organizational architecture, configuration, or error logs. The CSV source is a placeholder for where an approved production data connector would go.
+## Background
 
-The sample dataset names reflect common LMS concepts, not an export of proprietary data. Values, IDs, dates, and records were created for this demo.
+The original integration I worked on used **Instructure's Canvas DAP library** to synchronize LMS data into a target database for reporting and other downstream uses.
 
-**Important:** This example models a simplified timestamp-based sync. It does not support deletes, schema evolution, pagination, provider-specific cursors, or full production recovery semantics. Real Canvas Data 2 integrations should use documented provider interfaces and their supported synchronization rules.
+Working on that integration gave me hands-on experience with data synchronization, handling large datasets, troubleshooting failed or lengthy syncs, and maintaining data pipelines.
 
-## Why make this public?
+I wanted a way to demonstrate some of those same skills on GitHub, so I built this simplified example from scratch.
 
-The repository demonstrates general-purpose Python ETL skills—validation, loading, upserts, checkpoints, and tests—without sharing any work product, student information, internal endpoints, or secrets from an employer.
+There are a few important differences between this demo and the original integration:
 
-## License and publication
+- This project uses CSV files instead of connecting to Canvas through the DAP library.
+- All data is fictional and was created specifically for testing.
+- SQLite replaces the actual target database environment.
+- The pipeline focuses on core ETL functionality rather than replicating a production integration.
 
-No license is included automatically. Add a license only if you are comfortable granting those rights to others. Review your employment agreement and confidentiality obligations before publishing anything derived from work done for an employer.
+This is also intentionally a simplified implementation. It doesn't handle everything a production pipeline would, such as deleted records, schema changes, API pagination, or more advanced recovery scenarios.
+
+## Why I built this
+
+I wanted to have something on GitHub that demonstrates my experience with Python, ETL development, database integration, and incremental data processing.
+
+Since the work I performed for my previous employer is not mine to publish, I created this independent example using general data engineering practices.
+
+**This repository is for demonstration and testing purposes only.** It is not the original Instructure integration, contains no employer-owned code or data, and is not intended to be used as a production Canvas Data 2 synchronization tool.
