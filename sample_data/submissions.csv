@@ -1,0 +1,3 @@
+id,updated_at,course_id,student_id,assignment_id,score
+submission-001,2026-01-02T12:00:00Z,course-001,student-001,assignment-001,92
+submission-002,2026-01-03T12:00:00Z,course-002,student-002,assignment-002,88
